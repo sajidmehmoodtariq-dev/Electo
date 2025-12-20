@@ -5,8 +5,10 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import PendingApproval from './pages/PendingApproval';
+import Rejected from './pages/Rejected';
 import CompleteProfile from './pages/CompleteProfile';
-import { AdminDashboard, OfficialDashboard, VoterDashboard } from './pages/Dashboards';
+import { OfficialDashboard, VoterDashboard } from './pages/Dashboards';
+import AdminDashboard from './pages/AdminDashboard';
 
 const RedirectHandler = () => {
   const { user, loading } = useAuth();
@@ -21,8 +23,12 @@ const RedirectHandler = () => {
           return;
         }
 
-        // Check Approval
-        if (user.isApproved === false) {
+        // Check Status
+        if (user.status === 'rejected') {
+          navigate('/rejected');
+          return;
+        }
+        if (user.status === 'pending' || user.isApproved === false) {
           navigate('/pending-approval');
           return;
         }
@@ -47,6 +53,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/pending-approval" element={<PendingApproval />} />
+          <Route path="/rejected" element={<Rejected />} />
           <Route path="/auth/success" element={<RedirectHandler />} />
 
           {/* Protected Profile Completion */}

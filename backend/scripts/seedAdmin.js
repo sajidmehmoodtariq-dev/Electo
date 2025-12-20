@@ -20,6 +20,8 @@ const seedAdmin = async () => {
             email: 'admin@electo.com',
             password: 'adminpassword123', // Will be hashed by pre-save hook
             role: 'admin',
+            status: 'active',
+            cnic: '00000-0000000-1', // Default Admin CNIC
             isVoted: false,
         });
 

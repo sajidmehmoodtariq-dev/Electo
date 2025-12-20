@@ -13,8 +13,8 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        // Password is required if googleId is not present
-        required: function () { return !this.googleId; },
+        // Password is required if googleId and githubId are not present
+        required: function () { return !this.googleId && !this.githubId; },
         select: false, // Don't return password by default
     },
     role: {
@@ -41,9 +41,13 @@ const userSchema = new mongoose.Schema({
         unique: true,
         sparse: true,
     },
-    isApproved: {
-        type: Boolean,
-        default: false,
+    status: {
+        type: String,
+        enum: ['pending', 'active', 'rejected'],
+        default: 'pending',
+    },
+    rejectionReason: {
+        type: String,
     },
     avatar: {
         type: String,

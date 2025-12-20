@@ -34,7 +34,7 @@ passport.use(
                     email: profile.emails[0].value,
                     avatar: profile.photos[0].value,
                     role: 'voter',
-                    isApproved: false, // Default pending
+                    status: 'pending',
                 });
                 done(null, newUser);
             } catch (err) {
@@ -78,7 +78,7 @@ passport.use(
                     email: email || `github_${profile.id}@noemail.com`,
                     avatar: profile.photos[0].value,
                     role: 'voter',
-                    isApproved: false,
+                    status: 'pending',
                 });
                 done(null, newUser);
             } catch (err) {

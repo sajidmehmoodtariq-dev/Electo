@@ -24,7 +24,7 @@ const registerUser = async (req, res) => {
             password,
             cnic,
             role: 'voter',
-            isApproved: false, // Default pending for new registrations
+            status: 'pending', // Default
         });
 
         if (user) {
@@ -33,9 +33,9 @@ const registerUser = async (req, res) => {
                 name: user.name,
                 email: user.email,
                 role: user.role,
-                isApproved: user.isApproved,
+                status: user.status,
                 cnic: user.cnic,
-                token: generateToken(user._id, user.role),
+                token: generateToken(user._id, user.role, user.cnic, user.status, user.isApproved),
             });
         } else {
             res.status(400).json({ message: 'Invalid user data' });
@@ -58,9 +58,10 @@ const loginUser = async (req, res) => {
                 name: user.name,
                 email: user.email,
                 role: user.role,
-                isApproved: user.isApproved,
+                status: user.status || 'active', // Fallback for old records if any
+                rejectionReason: user.rejectionReason,
                 cnic: user.cnic,
-                token: generateToken(user._id, user.role),
+                token: generateToken(user._id, user.role, user.cnic, user.status || 'active', user.isApproved),
             });
         } else {
             res.status(401).json({ message: 'Invalid email or password' });
@@ -75,19 +76,46 @@ const handleSocialLogin = (req, res) => {
         return res.status(401).json({ message: 'Authentication failed' });
     }
 
-    const token = generateToken(req.user._id, req.user.role);
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
 
-    // Pass isApproved and cnic status to frontend via query params
-    const isApproved = req.user.isApproved;
+    // Pass status and cnic status to frontend via query params
+    // removed duplicate declaration of status
+    const status = req.user.status || 'pending';
     const hasCnic = !!req.user.cnic;
+    const rejectionReason = req.user.rejectionReason ? encodeURIComponent(req.user.rejectionReason) : '';
 
-    // Encode boolean to prevent parsing issues if needed, but strings 'true'/'false' work
-    res.redirect(`${frontendUrl}/auth/success?token=${token}&role=${req.user.role}&isApproved=${isApproved}&hasCnic=${hasCnic}`);
+    const token = generateToken(req.user._id, req.user.role, req.user.cnic, status, req.user.isApproved);
+
+    res.redirect(`${frontendUrl}/auth/success?token=${token}&role=${req.user.role}&status=${status}&hasCnic=${hasCnic}&reason=${rejectionReason}`);
 };
 
 const googleCallback = handleSocialLogin;
 const githubCallback = handleSocialLogin;
+
+// @desc    Get current user profile
+// @route   GET /api/auth/me
+// @access  Private
+const getMe = async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+        if (user) {
+            res.json({
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                status: user.status,
+                rejectionReason: user.rejectionReason,
+                cnic: user.cnic,
+                token: generateToken(user._id, user.role, user.cnic, user.status, user.isApproved),
+            });
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
 // @desc    Update user profile (CNIC)
 const updateProfile = async (req, res) => {
@@ -103,6 +131,11 @@ const updateProfile = async (req, res) => {
                 }
                 user.cnic = req.body.cnic;
             }
+            if (req.body.role) {
+                if (['voter', 'official'].includes(req.body.role)) {
+                    user.role = req.body.role;
+                }
+            }
 
             const updatedUser = await user.save();
 
@@ -111,9 +144,9 @@ const updateProfile = async (req, res) => {
                 name: updatedUser.name,
                 email: updatedUser.email,
                 role: updatedUser.role,
-                isApproved: updatedUser.isApproved,
+                status: updatedUser.status,
                 cnic: updatedUser.cnic,
-                token: generateToken(updatedUser._id, updatedUser.role),
+                token: generateToken(updatedUser._id, updatedUser.role, updatedUser.cnic, updatedUser.status, updatedUser.isApproved),
             });
         } else {
             res.status(404).json({ message: 'User not found' });
@@ -123,4 +156,4 @@ const updateProfile = async (req, res) => {
     }
 }
 
-export { registerUser, loginUser, googleCallback, githubCallback, updateProfile };
+export { registerUser, loginUser, googleCallback, githubCallback, getMe, updateProfile };

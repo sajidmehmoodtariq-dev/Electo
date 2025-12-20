@@ -5,6 +5,7 @@ import connectDB from './config/db.js';
 import passport from 'passport';
 import './config/passport.js'; // Import passport config to run the strategy setup
 import authRoutes from './routes/authRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use(passport.initialize());
 
 app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.get('/', (req, res) => {
     res.send('API is running...');

@@ -1,6 +1,6 @@
 import express from 'express';
 import passport from 'passport';
-import { registerUser, loginUser, googleCallback, githubCallback, updateProfile } from '../controllers/authController.js';
+import { registerUser, loginUser, googleCallback, githubCallback, updateProfile, getMe } from '../controllers/authController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -10,6 +10,8 @@ router.post('/login', loginUser);
 router.put('/profile', protect, updateProfile);
 
 // Google OAuth Routes
+router.get('/me', protect, getMe);
+
 router.get(
     '/google',
     passport.authenticate('google', { scope: ['profile', 'email'] })
