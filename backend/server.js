@@ -14,6 +14,7 @@ connectDB();
 
 const app = express();
 
+app.enable('trust proxy');
 app.use(cors());
 app.use(express.json());
 
