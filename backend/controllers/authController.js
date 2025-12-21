@@ -6,7 +6,7 @@ import sendEmail from '../utils/sendEmail.js';
 // @desc    Register a new user
 const registerUser = async (req, res) => {
     try {
-        const { name, email, password, cnic } = req.body;
+        const { name, email, password, cnic, role } = req.body;
 
         const userExists = await User.findOne({ email });
         if (userExists) {
@@ -20,12 +20,16 @@ const registerUser = async (req, res) => {
             }
         }
 
+        // Validate role - only allow voter or official during registration, not admin
+        const allowedRoles = ['voter', 'official'];
+        const userRole = role && allowedRoles.includes(role) ? role : 'voter';
+
         const user = await User.create({
             name,
             email,
             password,
             cnic,
-            role: 'voter',
+            role: userRole,
             status: 'pending', // Default
         });
 

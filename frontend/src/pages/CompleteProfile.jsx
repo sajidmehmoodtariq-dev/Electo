@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { CreditCard, UserCircle } from 'lucide-react';
 import api from '../utils/api';
+import { validateCnic, formatCnic } from '../utils/validators';
 
 const CompleteProfile = () => {
     const { user } = useAuth(); // Get user from context, if available
@@ -55,6 +56,13 @@ const CompleteProfile = () => {
         setLoading(true);
         setError('');
 
+        const cnicError = validateCnic(cnic);
+        if (cnicError) {
+            setError(cnicError);
+            setLoading(false);
+            return;
+        }
+
         try {
             const { data } = await api.put('/auth/profile', { cnic, role });
             // Update token with the new one containing CNIC
@@ -101,9 +109,10 @@ const CompleteProfile = () => {
                             <input
                                 type="text"
                                 value={cnic}
-                                onChange={(e) => setCnic(e.target.value)}
+                                onChange={(e) => setCnic(formatCnic(e.target.value))}
                                 className="w-full pl-10 pr-4 py-3 bg-white/5 border border-purple-300/30 rounded-xl text-white placeholder-purple-200/50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all"
-                                placeholder="00000-0000000-0"
+                                placeholder="12345-1234567-1"
+                                maxLength="15"
                                 required
                             />
                         </div>

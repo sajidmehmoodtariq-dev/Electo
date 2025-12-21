@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
-import { User, Lock, Mail, CreditCard, Upload } from 'lucide-react';
+import { User, Lock, Mail, CreditCard, Upload, UserCog } from 'lucide-react';
 
-import { validatePassword } from '../utils/validators';
+import { validatePassword, validateCnic, formatCnic } from '../utils/validators';
 
 const Signup = () => {
     const [formData, setFormData] = useState({
@@ -11,7 +11,8 @@ const Signup = () => {
         email: '',
         password: '',
         confirmPassword: '',
-        cnic: ''
+        cnic: '',
+        role: 'voter'
     });
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -19,7 +20,12 @@ const Signup = () => {
     const navigate = useNavigate();
 
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        if (name === 'cnic') {
+            setFormData({ ...formData, [name]: formatCnic(value) });
+        } else {
+            setFormData({ ...formData, [name]: value });
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -36,16 +42,30 @@ const Signup = () => {
             return;
         }
 
+        const cnicError = validateCnic(formData.cnic);
+        if (cnicError) {
+            setError(cnicError);
+            return;
+        }
+
         setIsLoading(true);
         try {
-            // Map form data to backend expectations (backend expects 'name', 'email', 'password', 'cnic')
+            // Map form data to backend expectations (backend expects 'name', 'email', 'password', 'cnic', 'role')
             const user = await register({
                 name: formData.username,
-                email: formData.email, // Added email field to UI as it is required by backend usually, though wireframe might stick to simpler
+                email: formData.email,
                 cnic: formData.cnic,
-                password: formData.password
+                password: formData.password,
+                role: formData.role
             });
-            navigate('/voter'); // Redirect to voter dashboard
+            // Redirect based on role
+            if (user.role === 'admin') {
+                navigate('/admin');
+            } else if (user.role === 'official') {
+                navigate('/official');
+            } else {
+                navigate('/voter');
+            }
         } catch (err) {
             setError(err.response?.data?.message || 'Registration failed');
         } finally {
@@ -110,10 +130,28 @@ const Signup = () => {
                     </div>
 
                     <div className="space-y-1">
-                        <label className="text-xs font-medium text-purple-100 ml-1">CNIC</label>
+                        <label className="text-xs font-medium text-purple-100 ml-1">Role</label>
                         <div className="relative">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <CreditCard className="h-4 w-4 text-purple-200" />
+                                <UserCog className="h-4 w-4 text-purple-200" />
+                            </div>
+                            <select
+                                name="role"
+                                value={formData.role}
+                                onChange={handleChange}
+                                className="w-full pl-9 pr-4 py-3 bg-white/5 border border-purple-300/30 rounded-xl text-white placeholder-purple-200/50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all appearance-none cursor-pointer"
+                                required
+                            >
+                                <option value="voter" className="bg-purple-900">Voter</option>
+                                <option value="official" className="bg-purple-900">Election Official</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="space-y-1">
+                        <label className="text-xs font-medium text-purple-100 ml-1">CNIC</label>
+                        <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">\n                                <CreditCard className="h-4 w-4 text-purple-200" />
                             </div>
                             <input
                                 type="text"
@@ -121,7 +159,9 @@ const Signup = () => {
                                 value={formData.cnic}
                                 onChange={handleChange}
                                 className="w-full pl-9 pr-4 py-3 bg-white/5 border border-purple-300/30 rounded-xl text-white placeholder-purple-200/50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all"
-                                placeholder="00000-0000000-0"
+                                placeholder="12345-1234567-1"
+                                maxLength="15"
+                                required
                             />
                         </div>
                     </div>

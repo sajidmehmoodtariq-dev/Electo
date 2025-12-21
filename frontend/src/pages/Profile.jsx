@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import api from '../utils/api';
 import { User, Mail, MapPin, Lock, Save, AlertCircle, ArrowLeft, Upload, Camera } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { validateCnic, formatCnic } from '../utils/validators';
 
 const Profile = () => {
     const { user, login } = useAuth(); // login not used directly but context update might happen via reload
@@ -47,7 +48,12 @@ const Profile = () => {
     }, [user]);
 
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        if (name === 'cnic') {
+            setFormData({ ...formData, [name]: formatCnic(value) });
+        } else {
+            setFormData({ ...formData, [name]: value });
+        }
     };
 
     const handleFileChange = (e) => {
@@ -67,6 +73,15 @@ const Profile = () => {
             setMessage({ type: 'error', text: 'Passwords do not match' });
             setLoading(false);
             return;
+        }
+
+        if (formData.cnic) {
+            const cnicError = validateCnic(formData.cnic);
+            if (cnicError) {
+                setMessage({ type: 'error', text: cnicError });
+                setLoading(false);
+                return;
+            }
         }
 
         try {
@@ -197,6 +212,7 @@ const Profile = () => {
                                         value={formData.cnic}
                                         onChange={handleChange}
                                         placeholder="12345-1234567-1"
+                                        maxLength="15"
                                         className="pl-10 block w-full bg-white/10 backdrop-blur-md border border-white/20 text-white placeholder-white/50 rounded-lg shadow-sm focus:ring-2 focus:ring-white/50 focus:border-white/50 py-2.5"
                                     />
                                 </div>

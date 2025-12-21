@@ -27,6 +27,13 @@ const userSchema = new mongoose.Schema({
         type: String,
         unique: true,
         sparse: true, // Allows null/undefined to not clash for uniqueness
+        validate: {
+            validator: function(v) {
+                // Allow null/undefined or must match XXXXX-XXXXXXX-X format
+                return !v || /^\d{5}-\d{7}-\d$/.test(v);
+            },
+            message: props => `${props.value} is not a valid CNIC format! Use XXXXX-XXXXXXX-X`
+        }
     },
     city: { type: String },
     province: { type: String },
