@@ -1,5 +1,7 @@
 import User from '../models/User.js';
 import generateToken from '../utils/generateToken.js';
+import crypto from 'crypto';
+import sendEmail from '../utils/sendEmail.js';
 
 // @desc    Register a new user
 const registerUser = async (req, res) => {
@@ -156,4 +158,81 @@ const updateProfile = async (req, res) => {
     }
 }
 
-export { registerUser, loginUser, googleCallback, githubCallback, getMe, updateProfile };
+// @desc    Forgot Password
+const forgotPassword = async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Get reset token
+        const resetToken = user.getResetPasswordToken();
+
+        await user.save({ validateBeforeSave: false }); // Skip validation for other fields
+
+        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+        const resetUrl = `${frontendUrl}/reset-password/${resetToken}`;
+
+        const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a PUT request to: \n\n ${resetUrl}`;
+
+        try {
+            await sendEmail({
+                email: user.email,
+                subject: 'Password reset token',
+                message,
+            });
+
+            res.status(200).json({ success: true, data: 'Email sent' });
+        } catch (error) {
+            user.resetPasswordToken = undefined;
+            user.resetPasswordExpire = undefined;
+
+            await user.save({ validateBeforeSave: false });
+
+            return res.status(500).json({ message: 'Email could not be sent' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @desc    Reset Password
+const resetPassword = async (req, res) => {
+    // Get hashed token
+    const resetPasswordToken = crypto
+        .createHash('sha256')
+        .update(req.params.resetToken)
+        .digest('hex');
+
+    try {
+        const user = await User.findOne({
+            resetPasswordToken,
+            resetPasswordExpire: { $gt: Date.now() },
+        });
+
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid token or token expired' });
+        }
+
+        // Set new password
+        user.password = req.body.password;
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+
+        await user.save();
+
+        res.status(201).json({
+            success: true,
+            data: 'Password reset success',
+            token: generateToken(user._id, user.role, user.cnic, user.status, user.isApproved),
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export { registerUser, loginUser, googleCallback, githubCallback, getMe, updateProfile, forgotPassword, resetPassword };

@@ -7,6 +7,8 @@ import Signup from './pages/Signup';
 import PendingApproval from './pages/PendingApproval';
 import Rejected from './pages/Rejected';
 import CompleteProfile from './pages/CompleteProfile';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import { OfficialDashboard, VoterDashboard } from './pages/Dashboards';
 import AdminDashboard from './pages/AdminDashboard';
 
@@ -52,6 +54,8 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="/pending-approval" element={<PendingApproval />} />
           <Route path="/rejected" element={<Rejected />} />
           <Route path="/auth/success" element={<RedirectHandler />} />

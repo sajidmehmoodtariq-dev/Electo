@@ -1,4 +1,5 @@
 import User from '../models/User.js';
+import sendEmail from '../utils/sendEmail.js';
 
 // @desc    Get users by status (or all)
 // @route   GET /api/admin/users
@@ -46,6 +47,21 @@ const updateUserStatus = async (req, res) => {
         }
 
         const updatedUser = await user.save();
+
+        if (status === 'active') {
+            const message = `Dear ${updatedUser.name},\n\nYour account has been approved by the admin. You can now login to your account.\n\nRegards,\nTeam Electo`;
+
+            try {
+                await sendEmail({
+                    email: updatedUser.email,
+                    subject: 'Account Approved',
+                    message,
+                });
+            } catch (error) {
+                console.error('Email send failed:', error);
+            }
+        }
+
         res.json({
             _id: updatedUser._id,
             status: updatedUser.status,
