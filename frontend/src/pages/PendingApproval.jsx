@@ -1,9 +1,11 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import { Clock } from 'lucide-react';
 
 const PendingApproval = () => {
     const { logout } = useAuth();
+    const navigate = useNavigate();
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-4">
@@ -21,7 +23,10 @@ const PendingApproval = () => {
                 </p>
 
                 <button
-                    onClick={logout}
+                    onClick={() => {
+                        logout();
+                        navigate('/login');
+                    }}
                     className="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-3 px-4 rounded-xl transition-all border border-white/20"
                 >
                     Back to Login

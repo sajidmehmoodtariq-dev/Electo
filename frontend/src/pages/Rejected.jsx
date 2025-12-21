@@ -1,10 +1,11 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { XCircle } from 'lucide-react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Rejected = () => {
     const { logout } = useAuth();
+    const navigate = useNavigate();
     const location = useLocation();
 
     // Attempt to get reason from location state or query params if passed
@@ -46,7 +47,10 @@ const Rejected = () => {
                 </div>
 
                 <button
-                    onClick={logout}
+                    onClick={() => {
+                        logout();
+                        navigate('/login');
+                    }}
                     className="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-3 px-4 rounded-xl transition-all border border-white/20"
                 >
                     Back to Login
