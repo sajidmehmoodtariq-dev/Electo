@@ -12,7 +12,8 @@ const Signup = () => {
         password: '',
         confirmPassword: '',
         cnic: '',
-        role: 'voter'
+        role: 'voter',
+        profilePicture: null
     });
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -25,6 +26,13 @@ const Signup = () => {
             setFormData({ ...formData, [name]: formatCnic(value) });
         } else {
             setFormData({ ...formData, [name]: value });
+        }
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setFormData({ ...formData, profilePicture: file });
         }
     };
 
@@ -58,8 +66,12 @@ const Signup = () => {
                 password: formData.password,
                 role: formData.role
             });
-            // Redirect based on role
-            if (user.role === 'admin') {
+            // Redirect based on status first, then role
+            if (user.status === 'pending') {
+                navigate('/pending-approval');
+            } else if (user.status === 'rejected') {
+                navigate('/rejected');
+            } else if (user.role === 'admin') {
                 navigate('/admin');
             } else if (user.role === 'official') {
                 navigate('/official');
@@ -151,7 +163,8 @@ const Signup = () => {
                     <div className="space-y-1">
                         <label className="text-xs font-medium text-purple-100 ml-1">CNIC</label>
                         <div className="relative">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">\n                                <CreditCard className="h-4 w-4 text-purple-200" />
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <CreditCard className="h-4 w-4 text-purple-200" />
                             </div>
                             <input
                                 type="text"
@@ -168,10 +181,18 @@ const Signup = () => {
 
                     <div className="space-y-1">
                         <label className="text-xs font-medium text-purple-100 ml-1">Upload Image</label>
-                        <button type="button" className="w-full flex items-center justify-center py-3 bg-white/5 border border-purple-300/30 border-dashed rounded-xl text-purple-200 hover:bg-white/10 transition-all cursor-pointer">
+                        <input
+                            type="file"
+                            id="profilePicture"
+                            name="profilePicture"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            className="hidden"
+                        />
+                        <label htmlFor="profilePicture" className="w-full flex items-center justify-center py-3 bg-white/5 border border-purple-300/30 border-dashed rounded-xl text-purple-200 hover:bg-white/10 transition-all cursor-pointer">
                             <Upload className="h-4 w-4 mr-2" />
-                            <span>Upload Profile Picture</span>
-                        </button>
+                            <span>{formData.profilePicture ? formData.profilePicture.name : 'Upload Profile Picture'}</span>
+                        </label>
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">

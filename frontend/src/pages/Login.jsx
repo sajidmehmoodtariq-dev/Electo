@@ -16,14 +16,20 @@ const Login = () => {
         setIsLoading(true);
         try {
             const user = await login(email, password);
-            // Redirect logic handled by App.jsx or here.
-            // With new App.jsx redirect handler, we might just want to reload or let context update trigger it?
-            // Since login returns user, we can navigate manually too.
-            if (!user.cnic) navigate('/complete-profile');
-            else if (user.isApproved === false) navigate('/pending-approval');
-            else if (user.role === 'admin') navigate('/admin');
-            else if (user.role === 'official') navigate('/official');
-            else navigate('/voter');
+            // Redirect based on status first, then other conditions
+            if (user.status === 'pending') {
+                navigate('/pending-approval');
+            } else if (user.status === 'rejected') {
+                navigate('/rejected');
+            } else if (!user.cnic) {
+                navigate('/complete-profile');
+            } else if (user.role === 'admin') {
+                navigate('/admin');
+            } else if (user.role === 'official') {
+                navigate('/official');
+            } else {
+                navigate('/voter');
+            }
         } catch (err) {
             setError('Invalid email or password');
         }
