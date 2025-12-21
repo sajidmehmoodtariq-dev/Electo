@@ -30,8 +30,18 @@ const castVote = async (req, res) => {
             return res.status(400).json({ message: 'Election is not active' });
         }
 
-        // 2. Check Eligibility
-        if (election.type === 'City' || election.type === 'City Wide') {
+        // 2. Check Eligibility based on location
+        if (election.type === 'Provincial') {
+            if (!user.province) {
+                return res.status(403).json({ message: 'Please update your province in your profile to vote in provincial elections.' });
+            }
+            if (election.targetProvince && election.targetProvince !== user.province) {
+                return res.status(403).json({ message: `You are not eligible. This election is for ${election.targetProvince} residents only.` });
+            }
+        } else if (election.type === 'City' || election.type === 'City Wide') {
+            if (!user.city) {
+                return res.status(403).json({ message: 'Please update your city in your profile to vote in city-wide elections.' });
+            }
             if (election.targetCity && election.targetCity !== user.city) {
                 return res.status(403).json({ message: `You are not eligible. This election is for ${election.targetCity} residents only.` });
             }

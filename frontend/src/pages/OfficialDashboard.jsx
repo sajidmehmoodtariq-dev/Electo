@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import api from '../utils/api';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate, Link } from 'react-router-dom';
 import { LogOut, Plus, Calendar, Users, Upload, CheckCircle, Clock } from 'lucide-react';
+import UserDropdown from '../components/UserDropdown';
 
 const OfficialDashboard = () => {
     const { logout, user } = useAuth();
@@ -143,10 +145,7 @@ const OfficialDashboard = () => {
                     <h1 className="text-2xl font-bold text-gray-800">Official Dashboard</h1>
                 </div>
                 <div className="flex items-center space-x-4">
-                    <span className="text-gray-500 text-sm">Welcome, {user?.name}</span>
-                    <button onClick={logout} className="flex items-center text-red-600 hover:text-red-700 font-medium transition-colors">
-                        <LogOut className="h-4 w-4 mr-2" /> Logout
-                    </button>
+                    <UserDropdown />
                 </div>
             </header>
 

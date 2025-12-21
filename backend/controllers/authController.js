@@ -37,7 +37,8 @@ const registerUser = async (req, res) => {
                 role: user.role,
                 status: user.status,
                 cnic: user.cnic,
-                token: generateToken(user._id, user.role, user.cnic, user.status, user.isApproved),
+                avatar: user.avatar,
+                token: generateToken(user._id, user.role, user.cnic, user.status, user.isApproved, user.name, user.email, user.avatar),
             });
         } else {
             res.status(400).json({ message: 'Invalid user data' });
@@ -63,7 +64,8 @@ const loginUser = async (req, res) => {
                 status: user.status || 'active', // Fallback for old records if any
                 rejectionReason: user.rejectionReason,
                 cnic: user.cnic,
-                token: generateToken(user._id, user.role, user.cnic, user.status || 'active', user.isApproved),
+                avatar: user.avatar,
+                token: generateToken(user._id, user.role, user.cnic, user.status || 'active', user.isApproved, user.name, user.email, user.avatar),
             });
         } else {
             res.status(401).json({ message: 'Invalid email or password' });
@@ -86,7 +88,7 @@ const handleSocialLogin = (req, res) => {
     const hasCnic = !!req.user.cnic;
     const rejectionReason = req.user.rejectionReason ? encodeURIComponent(req.user.rejectionReason) : '';
 
-    const token = generateToken(req.user._id, req.user.role, req.user.cnic, status, req.user.isApproved);
+    const token = generateToken(req.user._id, req.user.role, req.user.cnic, status, req.user.isApproved, req.user.name, req.user.email, req.user.avatar);
 
     res.redirect(`${frontendUrl}/auth/success?token=${token}&role=${req.user.role}&status=${status}&hasCnic=${hasCnic}&reason=${rejectionReason}`);
 };
@@ -109,7 +111,10 @@ const getMe = async (req, res) => {
                 status: user.status,
                 rejectionReason: user.rejectionReason,
                 cnic: user.cnic,
-                token: generateToken(user._id, user.role, user.cnic, user.status, user.isApproved),
+                city: user.city,
+                province: user.province,
+                avatar: user.avatar,
+                token: generateToken(user._id, user.role, user.cnic, user.status, user.isApproved, user.name, user.email, user.avatar),
             });
         } else {
             res.status(404).json({ message: 'User not found' });
@@ -139,6 +144,20 @@ const updateProfile = async (req, res) => {
                 }
             }
 
+            // Update Location
+            user.city = req.body.city || user.city;
+            user.province = req.body.province || user.province;
+
+            // Update Avatar
+            if (req.file && req.file.path) {
+                user.avatar = req.file.path;
+            }
+
+            // Update Password
+            if (req.body.password) {
+                user.password = req.body.password; // Will be hashed by pre-save middleware
+            }
+
             const updatedUser = await user.save();
 
             res.json({
@@ -148,7 +167,10 @@ const updateProfile = async (req, res) => {
                 role: updatedUser.role,
                 status: updatedUser.status,
                 cnic: updatedUser.cnic,
-                token: generateToken(updatedUser._id, updatedUser.role, updatedUser.cnic, updatedUser.status, updatedUser.isApproved),
+                city: updatedUser.city,
+                province: updatedUser.province,
+                avatar: updatedUser.avatar,
+                token: generateToken(updatedUser._id, updatedUser.role, updatedUser.cnic, updatedUser.status, updatedUser.isApproved, updatedUser.name, updatedUser.email, updatedUser.avatar),
             });
         } else {
             res.status(404).json({ message: 'User not found' });
@@ -228,7 +250,7 @@ const resetPassword = async (req, res) => {
         res.status(201).json({
             success: true,
             data: 'Password reset success',
-            token: generateToken(user._id, user.role, user.cnic, user.status, user.isApproved),
+            token: generateToken(user._id, user.role, user.cnic, user.status, user.isApproved, user.name, user.email, user.avatar),
         });
     } catch (error) {
         res.status(500).json({ message: error.message });

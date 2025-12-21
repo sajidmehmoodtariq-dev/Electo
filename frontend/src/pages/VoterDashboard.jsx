@@ -3,6 +3,8 @@ import api from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 import { LogOut, Calendar, CheckCircle, Clock, Trophy, BarChart3 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, CartesianGrid } from 'recharts';
+import { Link } from 'react-router-dom';
+import UserDropdown from '../components/UserDropdown';
 
 const VoterDashboard = () => {
     const { logout, user } = useAuth();
@@ -67,8 +69,9 @@ const VoterDashboard = () => {
 
     const isEligible = (election) => {
         if (election.type === 'National') return true;
+        if (election.type === 'Provincial') return election.targetProvince === user?.province;
         if (election.type === 'City' || election.type === 'City Wide') return election.targetCity === user?.city;
-        return election.targetCity === user?.city; // Simple fallback
+        return true; // Fallback for any other type
     };
 
     const hasVoted = (election) => {
@@ -98,15 +101,7 @@ const VoterDashboard = () => {
             {/* Header */}
             <header className="bg-white border-b border-gray-200 px-8 py-4 flex justify-between items-center sticky top-0 z-10">
                 <h1 className="text-2xl font-bold text-gray-800">Voter Dashboard</h1>
-                <div className="flex items-center space-x-4">
-                    <div className="text-right">
-                        <span className="block text-sm font-bold text-gray-800">{user?.name}</span>
-                        <span className="block text-xs text-gray-500">{user?.city}</span>
-                    </div>
-                    <button onClick={logout} className="flex items-center text-red-600 hover:text-red-700 font-medium transition-colors">
-                        <LogOut className="h-4 w-4 mr-2" /> Logout
-                    </button>
-                </div>
+                <UserDropdown />
             </header>
 
             <main className="p-8 max-w-5xl mx-auto">
@@ -142,6 +137,7 @@ const VoterDashboard = () => {
                                     </span>
                                     <span className="text-gray-500 text-sm font-medium">{election.type}</span>
                                     {election.targetCity && <span className="text-gray-400 text-sm">• {election.targetCity}</span>}
+                                    {election.targetProvince && <span className="text-gray-400 text-sm">• {election.targetProvince}</span>}
                                 </div>
                                 <h3 className="text-xl font-bold text-gray-800 mb-1">{election.title}</h3>
                                 <p className="text-sm text-gray-500 flex items-center">

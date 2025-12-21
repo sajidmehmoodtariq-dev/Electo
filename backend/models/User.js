@@ -28,6 +28,8 @@ const userSchema = new mongoose.Schema({
         unique: true,
         sparse: true, // Allows null/undefined to not clash for uniqueness
     },
+    city: { type: String },
+    province: { type: String },
     votedElections: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Election'

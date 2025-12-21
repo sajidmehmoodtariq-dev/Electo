@@ -1,11 +1,12 @@
 import Election from '../models/Election.js';
+import User from '../models/User.js';
 
 // @desc    Create a new election
 // @route   POST /api/elections
 // @access  Private/Official
 const createElection = async (req, res) => {
     try {
-        const { title, type, date, targetCity } = req.body;
+        const { title, type, date, targetCity, targetProvince } = req.body;
 
         const electionDate = new Date(date);
 
@@ -29,6 +30,7 @@ const createElection = async (req, res) => {
             title,
             type,
             targetCity: (type === 'City' || type === 'City Wide') ? targetCity : undefined,
+            targetProvince: (type === 'Provincial') ? targetProvince : undefined,
             date: electionDate,
             year,
             startTime,
@@ -47,7 +49,7 @@ const createElection = async (req, res) => {
 // @access  Private/Official
 const updateElection = async (req, res) => {
     try {
-        const { title, type, date, targetCity, isCancelled } = req.body;
+        const { title, type, date, targetCity, targetProvince, isCancelled } = req.body;
         const election = await Election.findById(req.params.id);
 
         if (!election) {
@@ -58,6 +60,7 @@ const updateElection = async (req, res) => {
         if (title) election.title = title;
         if (type) election.type = type;
         if (targetCity !== undefined) election.targetCity = (type === 'City' || type === 'City Wide') ? targetCity : undefined;
+        if (targetProvince !== undefined) election.targetProvince = (type === 'Provincial') ? targetProvince : undefined;
         if (isCancelled !== undefined) election.isCancelled = isCancelled;
 
         if (date) {
@@ -95,7 +98,23 @@ const updateElection = async (req, res) => {
 // @access  Private
 const getElections = async (req, res) => {
     try {
-        const elections = await Election.find({});
+        const userId = req.user._id;
+        const user = await User.findById(userId);
+        
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Build query based on user's location
+        const query = {
+            $or: [
+                { type: 'National' }, // National elections are for everyone
+                { type: 'Provincial', targetProvince: user.province }, // Provincial elections for user's province
+                { type: { $in: ['City', 'City Wide'] }, targetCity: user.city } // City elections for user's city
+            ]
+        };
+
+        const elections = await Election.find(query);
         res.json(elections);
     } catch (error) {
         res.status(500).json({ message: error.message });

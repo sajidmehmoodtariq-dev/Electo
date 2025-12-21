@@ -12,6 +12,7 @@ import ResetPassword from './pages/ResetPassword';
 import OfficialDashboard from './pages/OfficialDashboard';
 import VoterDashboard from './pages/VoterDashboard';
 import AdminDashboard from './pages/AdminDashboard';
+import Profile from './pages/Profile';
 
 const RedirectHandler = () => {
   const { user, loading } = useAuth();
@@ -64,6 +65,7 @@ const App = () => {
           {/* Protected Profile Completion */}
           <Route element={<ProtectedRoute allowedRoles={['admin', 'official', 'voter']} />}>
             <Route path="/complete-profile" element={<CompleteProfile />} />
+            <Route path="/profile" element={<Profile />} />
           </Route>
 
           {/* Default Redirect */}
