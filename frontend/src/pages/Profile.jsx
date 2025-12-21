@@ -105,17 +105,17 @@ const Profile = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 font-sans py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-sans py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto">
                 <div className="mb-8 flex items-center">
-                    <Link to="/" className="text-gray-500 hover:text-indigo-600 transition-colors mr-4">
+                    <Link to="/" className="text-white/80 hover:text-white transition-colors mr-4">
                         <ArrowLeft className="h-6 w-6" />
                     </Link>
-                    <h1 className="text-3xl font-bold text-gray-900">Profile Settings</h1>
+                    <h1 className="text-3xl font-bold text-white">Profile Settings</h1>
                 </div>
 
-                <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-                    <div className="bg-indigo-600 px-8 py-6">
+                <div className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-white/20">
+                    <div className="bg-white/10 backdrop-blur-md px-8 py-6 border-b border-white/20">
                         <div className="flex items-center space-x-6">
                             <div className="relative group">
                                 <div className="h-24 w-24 bg-white rounded-full flex items-center justify-center text-4xl font-bold text-indigo-600 uppercase border-4 border-indigo-400 overflow-hidden">
@@ -151,45 +151,45 @@ const Profile = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {/* Personal Info */}
                             <div className="col-span-full">
-                                <h3 className="text-lg font-bold text-gray-800 mb-4 border-b pb-2">Personal Information</h3>
+                                <h3 className="text-lg font-bold text-white mb-4 border-b border-white/20 pb-2">Personal Information</h3>
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                                <label className="block text-sm font-medium text-white/90 mb-1">Full Name</label>
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <User className="h-5 w-5 text-gray-400" />
+                                        <User className="h-5 w-5 text-white/60" />
                                     </div>
                                     <input
                                         type="text"
                                         name="name"
                                         value={formData.name}
                                         onChange={handleChange}
-                                        className="pl-10 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 py-2.5 bg-gray-50"
+                                        className="pl-10 block w-full bg-white/10 backdrop-blur-md border border-white/20 text-white placeholder-white/50 rounded-lg shadow-sm focus:ring-2 focus:ring-white/50 focus:border-white/50 py-2.5"
                                     />
                                 </div>
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                                <label className="block text-sm font-medium text-white/90 mb-1">Email Address</label>
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <Mail className="h-5 w-5 text-gray-400" />
+                                        <Mail className="h-5 w-5 text-white/60" />
                                     </div>
                                     <input
                                         type="email"
                                         value={formData.email}
                                         disabled
-                                        className="pl-10 block w-full border-gray-300 rounded-lg shadow-sm bg-gray-100 text-gray-500 cursor-not-allowed py-2.5"
+                                        className="pl-10 block w-full bg-white/5 border border-white/20 text-white/70 cursor-not-allowed rounded-lg shadow-sm py-2.5"
                                     />
                                 </div>
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">CNIC (Identity)</label>
+                                <label className="block text-sm font-medium text-white/90 mb-1">CNIC (Identity)</label>
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <span className="text-gray-400 font-bold text-xs">ID</span>
+                                        <span className="text-white/60 font-bold text-xs">ID</span>
                                     </div>
                                     <input
                                         type="text"
@@ -197,50 +197,50 @@ const Profile = () => {
                                         value={formData.cnic}
                                         onChange={handleChange}
                                         placeholder="12345-1234567-1"
-                                        className="pl-10 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 py-2.5 bg-gray-50"
+                                        className="pl-10 block w-full bg-white/10 backdrop-blur-md border border-white/20 text-white placeholder-white/50 rounded-lg shadow-sm focus:ring-2 focus:ring-white/50 focus:border-white/50 py-2.5"
                                     />
                                 </div>
                             </div>
 
                             {/* Location Info */}
                             <div className="col-span-full mt-2">
-                                <h3 className="text-lg font-bold text-gray-800 mb-4 border-b pb-2">Location Details</h3>
+                                <h3 className="text-lg font-bold text-white mb-4 border-b border-white/20 pb-2">Location Details</h3>
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Province</label>
+                                <label className="block text-sm font-medium text-white/90 mb-1">Province</label>
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <MapPin className="h-5 w-5 text-gray-400" />
+                                        <MapPin className="h-5 w-5 text-white/60" />
                                     </div>
                                     <select
                                         name="province"
                                         value={formData.province}
                                         onChange={handleChange}
-                                        className="pl-10 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 py-2.5 bg-gray-50"
+                                        className="pl-10 block w-full bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-lg shadow-sm focus:ring-2 focus:ring-white/50 focus:border-white/50 py-2.5"
                                     >
-                                        <option value="">Select Province</option>
-                                        {provinces.map(p => <option key={p} value={p}>{p}</option>)}
+                                        <option value="" className="bg-gray-800">Select Province</option>
+                                        {provinces.map(p => <option key={p} value={p} className="bg-gray-800">{p}</option>)}
                                     </select>
                                 </div>
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
+                                <label className="block text-sm font-medium text-white/90 mb-1">City</label>
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <MapPin className="h-5 w-5 text-gray-400" />
+                                        <MapPin className="h-5 w-5 text-white/60" />
                                     </div>
                                     <select
                                         name="city"
                                         value={formData.city}
                                         onChange={handleChange}
                                         disabled={!formData.province}
-                                        className="pl-10 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 py-2.5 bg-gray-50 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                        className="pl-10 block w-full bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-lg shadow-sm focus:ring-2 focus:ring-white/50 focus:border-white/50 py-2.5 disabled:bg-white/5 disabled:cursor-not-allowed"
                                     >
-                                        <option value="">Select City</option>
+                                        <option value="" className="bg-gray-800">Select City</option>
                                         {formData.province && cityOptions[formData.province]?.map(c => (
-                                            <option key={c} value={c}>{c}</option>
+                                            <option key={c} value={c} className="bg-gray-800">{c}</option>
                                         ))}
                                     </select>
                                 </div>
@@ -248,14 +248,14 @@ const Profile = () => {
 
                             {/* Security */}
                             <div className="col-span-full mt-2">
-                                <h3 className="text-lg font-bold text-gray-800 mb-4 border-b pb-2">Security</h3>
+                                <h3 className="text-lg font-bold text-white mb-4 border-b border-white/20 pb-2">Security</h3>
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+                                <label className="block text-sm font-medium text-white/90 mb-1">New Password</label>
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <Lock className="h-5 w-5 text-gray-400" />
+                                        <Lock className="h-5 w-5 text-white/60" />
                                     </div>
                                     <input
                                         type="password"
@@ -263,16 +263,16 @@ const Profile = () => {
                                         value={formData.password}
                                         onChange={handleChange}
                                         placeholder="Leave blank to keep current"
-                                        className="pl-10 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 py-2.5 bg-gray-50"
+                                        className="pl-10 block w-full bg-white/10 backdrop-blur-md border border-white/20 text-white placeholder-white/50 rounded-lg shadow-sm focus:ring-2 focus:ring-white/50 focus:border-white/50 py-2.5"
                                     />
                                 </div>
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+                                <label className="block text-sm font-medium text-white/90 mb-1">Confirm New Password</label>
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <Lock className="h-5 w-5 text-gray-400" />
+                                        <Lock className="h-5 w-5 text-white/60" />
                                     </div>
                                     <input
                                         type="password"
@@ -280,7 +280,7 @@ const Profile = () => {
                                         value={formData.confirmPassword}
                                         onChange={handleChange}
                                         placeholder="Confirm new password"
-                                        className="pl-10 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 py-2.5 bg-gray-50"
+                                        className="pl-10 block w-full bg-white/10 backdrop-blur-md border border-white/20 text-white placeholder-white/50 rounded-lg shadow-sm focus:ring-2 focus:ring-white/50 focus:border-white/50 py-2.5"
                                     />
                                 </div>
                             </div>
@@ -291,7 +291,7 @@ const Profile = () => {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="flex items-center px-8 py-3 border border-transparent rounded-xl shadow-sm text-base font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="flex items-center px-8 py-3 border border-white/20 rounded-xl shadow-lg text-base font-bold text-white bg-white/20 backdrop-blur-md hover:bg-white/30 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <Save className="h-5 w-5 mr-2" />
                                 {loading ? 'Saving Changes...' : 'Save Profile'}

@@ -135,14 +135,14 @@ const OfficialDashboard = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 font-sans">
+        <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-sans">
             {/* Header */}
-            <header className="bg-white border-b border-gray-200 px-8 py-4 flex justify-between items-center sticky top-0 z-10">
+            <header className="bg-white/10 backdrop-blur-lg border-b border-white/20 px-8 py-4 flex justify-between items-center sticky top-0 z-10">
                 <div className="flex items-center space-x-3">
-                    <div className="bg-emerald-600 p-2 rounded-lg">
+                    <div className="bg-white/20 backdrop-blur-md p-2 rounded-lg">
                         <Users className="h-6 w-6 text-white" />
                     </div>
-                    <h1 className="text-2xl font-bold text-gray-800">Official Dashboard</h1>
+                    <h1 className="text-2xl font-bold text-white">Official Dashboard</h1>
                 </div>
                 <div className="flex items-center space-x-4">
                     <UserDropdown />
@@ -153,10 +153,10 @@ const OfficialDashboard = () => {
                 {activeView === 'dashboard' && (
                     <>
                         <div className="flex justify-between items-center mb-8">
-                            <h2 className="text-xl font-semibold text-gray-700">Managed Elections</h2>
+                            <h2 className="text-xl font-semibold text-white">Managed Elections</h2>
                             <button
                                 onClick={() => setActiveView('create-step-1')}
-                                className="flex items-center px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-500/30"
+                                className="flex items-center px-4 py-2 bg-white/20 backdrop-blur-md text-white rounded-lg hover:bg-white/30 transition-all shadow-lg"
                             >
                                 <Plus className="h-4 w-4 mr-2" /> Create Election
                             </button>
@@ -164,34 +164,34 @@ const OfficialDashboard = () => {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {elections.map(election => (
-                                <div key={election._id} className="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow overflow-hidden group">
+                                <div key={election._id} className="bg-white/10 backdrop-blur-lg rounded-xl shadow-xl border border-white/20 hover:shadow-2xl transition-shadow overflow-hidden group">
                                     <div className="p-6">
                                         <div className="flex justify-between items-start mb-4">
-                                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${election.status === 'Active' ? 'bg-green-100 text-green-700' :
-                                                election.status === 'Completed' ? 'bg-gray-100 text-gray-600' :
-                                                    election.status === 'Inactive' ? 'bg-red-100 text-red-700' :
-                                                        'bg-blue-100 text-blue-700'
+                                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${election.status === 'Active' ? 'bg-green-500 text-white' :
+                                                election.status === 'Completed' ? 'bg-white/20 text-white' :
+                                                    election.status === 'Inactive' ? 'bg-red-500 text-white' :
+                                                        'bg-blue-500 text-white'
                                                 }`}>
                                                 {election.status}
                                             </span>
-                                            <span className="text-gray-400 text-xs text-right">
+                                            <span className="text-white/70 text-xs text-right">
                                                 {election.type}
                                                 {election.targetCity && ` - ${election.targetCity}`}
                                                 {election.targetProvince && ` - ${election.targetProvince}`}
                                             </span>
                                         </div>
-                                        <h3 className="text-lg font-bold text-gray-800 mb-2 group-hover:text-emerald-600 transition-colors">{election.title}</h3>
-                                        <div className="flex items-center text-gray-500 text-sm mb-4">
+                                        <h3 className="text-lg font-bold text-white mb-2 group-hover:text-yellow-300 transition-colors">{election.title}</h3>
+                                        <div className="flex items-center text-white/80 text-sm mb-4">
                                             <Calendar className="h-4 w-4 mr-2" />
                                             {new Date(election.date).toLocaleDateString()} ({election.year})
                                         </div>
-                                        <div className="flex items-center text-gray-500 text-sm">
+                                        <div className="flex items-center text-white/80 text-sm">
                                             <Users className="h-4 w-4 mr-2" />
                                             {election.candidates.length} Candidates
                                         </div>
                                     </div>
-                                    <div className="bg-gray-50 px-6 py-3 border-t border-gray-100 flex justify-between items-center">
-                                        <span className="text-xs text-gray-500">
+                                    <div className="bg-white/10 backdrop-blur-md px-6 py-3 border-t border-white/20 flex justify-between items-center">
+                                        <span className="text-xs text-white/70">
                                             {new Date(election.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} -
                                             {new Date(election.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                         </span>

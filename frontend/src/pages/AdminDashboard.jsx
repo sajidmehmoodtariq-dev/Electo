@@ -115,18 +115,18 @@ const AdminDashboard = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-900 text-white font-sans">
+        <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-white font-sans">
             {/* Header */}
-            <header className="bg-gray-800 border-b border-gray-700 p-6 flex justify-between items-center shadow-md">
+            <header className="bg-white/10 backdrop-blur-lg border-b border-white/20 p-6 flex justify-between items-center shadow-xl">
                 <div className="flex items-center space-x-4">
-                    <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400">
+                    <h1 className="text-2xl font-bold text-white">
                         Admin Dashboard
                     </h1>
                 </div>
                 <div className="flex items-center space-x-4">
                     <button
                         onClick={() => setCreateModalOpen(true)}
-                        className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-500/30"
+                        className="flex items-center px-4 py-2 bg-white/20 backdrop-blur-md text-white rounded-lg hover:bg-white/30 transition-all shadow-lg"
                     >
                         <Plus className="h-4 w-4 mr-2" /> Create User
                     </button>
@@ -138,29 +138,29 @@ const AdminDashboard = () => {
             <div className="container mx-auto p-6 max-w-6xl">
 
                 {/* Tabs */}
-                <div className="flex space-x-6 mb-8 border-b border-gray-700">
+                <div className="flex space-x-6 mb-8 border-b border-white/20">
                     <button
                         onClick={() => setActiveTab('requests')}
-                        className={`pb-4 px-2 text-sm font-medium transition-colors relative ${activeTab === 'requests' ? 'text-indigo-400' : 'text-gray-400 hover:text-gray-200'}`}
+                        className={`pb-4 px-2 text-sm font-medium transition-colors relative ${activeTab === 'requests' ? 'text-white' : 'text-white/70 hover:text-white'}`}
                     >
                         New Requests
-                        {activeTab === 'requests' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-indigo-400 rounded-t-full"></div>}
+                        {activeTab === 'requests' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-white rounded-t-full"></div>}
                     </button>
                     <button
                         onClick={() => setActiveTab('users')}
-                        className={`pb-4 px-2 text-sm font-medium transition-colors relative ${activeTab === 'users' ? 'text-indigo-400' : 'text-gray-400 hover:text-gray-200'}`}
+                        className={`pb-4 px-2 text-sm font-medium transition-colors relative ${activeTab === 'users' ? 'text-white' : 'text-white/70 hover:text-white'}`}
                     >
                         User Management
-                        {activeTab === 'users' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-indigo-400 rounded-t-full"></div>}
+                        {activeTab === 'users' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-white rounded-t-full"></div>}
                     </button>
                 </div>
 
                 {/* Content */}
-                <div className="bg-gray-800 rounded-2xl border border-gray-700 overflow-hidden shadow-xl">
+                <div className="bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 overflow-hidden shadow-2xl">
                     <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                             <thead>
-                                <tr className="bg-gray-900/50 border-b border-gray-700 text-xs uppercase text-gray-400 tracking-wider">
+                                <tr className="bg-white/10 backdrop-blur-md border-b border-white/20 text-xs uppercase text-white/70 tracking-wider">
                                     <th className="p-4 pl-6">User</th>
                                     <th className="p-4">Role</th>
                                     <th className="p-4">CNIC</th>
@@ -168,15 +168,15 @@ const AdminDashboard = () => {
                                     <th className="p-4 pr-6 text-right">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-700">
+                            <tbody className="divide-y divide-white/10">
                                 {users.length === 0 ? (
                                     <tr>
-                                        <td colSpan="5" className="p-8 text-center text-gray-500 italic">
+                                        <td colSpan="5" className="p-8 text-center text-white/70 italic">
                                             No users found.
                                         </td>
                                     </tr>
                                 ) : users.map((user) => (
-                                    <tr key={user._id} className="hover:bg-gray-700/30 transition-colors">
+                                    <tr key={user._id} className="hover:bg-white/5 transition-colors">
                                         <td className="p-4 pl-6">
                                             <div className="flex items-center space-x-3">
                                                 <div className="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-sm font-bold">
@@ -184,7 +184,7 @@ const AdminDashboard = () => {
                                                 </div>
                                                 <div>
                                                     <div className="font-medium text-white">{user.name}</div>
-                                                    <div className="text-sm text-gray-400">{user.email}</div>
+                                                    <div className="text-sm text-white/70">{user.email}</div>
                                                 </div>
                                             </div>
                                         </td>
@@ -196,13 +196,13 @@ const AdminDashboard = () => {
                                                 {user.role}
                                             </span>
                                         </td>
-                                        <td className="p-4 text-gray-300 font-mono text-sm">
-                                            {user.cnic || <span className="text-gray-600">N/A</span>}
+                                        <td className="p-4 text-white/90 font-mono text-sm">
+                                            {user.cnic || <span className="text-white/40">N/A</span>}
                                         </td>
                                         <td className="p-4">
-                                            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${user.status === 'active' ? 'bg-green-500/10 text-green-400 border-green-500/20' :
-                                                user.status === 'rejected' ? 'bg-red-500/10 text-red-400 border-red-500/20' :
-                                                    'bg-yellow-500/10 text-yellow-400 border-yellow-500/20'
+                                            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${user.status === 'active' ? 'bg-green-500/20 text-green-300 border-green-400/40' :
+                                                user.status === 'rejected' ? 'bg-red-500/30 text-red-200 border-red-400/50' :
+                                                    'bg-yellow-500/20 text-yellow-300 border-yellow-400/40'
                                                 }`}>
                                                 {user.status}
                                             </span>
@@ -210,29 +210,29 @@ const AdminDashboard = () => {
                                         <td className="p-4 pr-6 text-right space-x-2">
                                             {user.status === 'pending' && (
                                                 <>
-                                                    <button onClick={() => handleApprove(user._id)} className="p-2 bg-green-500/10 hover:bg-green-500/20 text-green-400 rounded-lg transition-colors" title="Approve">
+                                                    <button onClick={() => handleApprove(user._id)} className="p-2 bg-green-500/20 hover:bg-green-500/30 text-green-200 rounded-lg transition-colors" title="Approve">
                                                         <Check className="h-4 w-4" />
                                                     </button>
-                                                    <button onClick={() => handleRejectClick(user)} className="p-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg transition-colors" title="Reject">
+                                                    <button onClick={() => handleRejectClick(user)} className="p-2 bg-red-500/20 hover:bg-red-500/30 text-red-200 rounded-lg transition-colors" title="Reject">
                                                         <X className="h-4 w-4" />
                                                     </button>
-                                                    <button onClick={() => handleDeleteClick(user)} className="p-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg transition-colors" title="Delete">
+                                                    <button onClick={() => handleDeleteClick(user)} className="p-2 bg-red-500/20 hover:bg-red-500/30 text-red-200 rounded-lg transition-colors" title="Delete">
                                                         <Trash2 className="h-4 w-4" />
                                                     </button>
                                                 </>
                                             )}
                                             {user.status === 'active' && user.role !== 'admin' && ( // Don't reject admins easily
                                                 <>
-                                                    <button onClick={() => handleRejectClick(user)} className="px-3 py-1 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg transition-colors text-xs border border-red-500/20">
+                                                    <button onClick={() => handleRejectClick(user)} className="px-3 py-1 bg-red-500/20 hover:bg-red-500/30 text-red-200 rounded-lg transition-colors text-xs border border-red-400/40">
                                                         Ban / Reject
                                                     </button>
-                                                    <button onClick={() => handleDeleteClick(user)} className="p-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg transition-colors" title="Delete">
+                                                    <button onClick={() => handleDeleteClick(user)} className="p-2 bg-red-500/20 hover:bg-red-500/30 text-red-200 rounded-lg transition-colors" title="Delete">
                                                         <Trash2 className="h-4 w-4" />
                                                     </button>
                                                 </>
                                             )}
                                             {(user.status === 'rejected' || user.role === 'admin' && user._id !== selectedUser?._id) && ( // Allow deleting rejected users. Prevent self-delete or admin delete needs care, but for now simple check.
-                                                <button onClick={() => handleDeleteClick(user)} className="p-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg transition-colors" title="Delete">
+                                                <button onClick={() => handleDeleteClick(user)} className="p-2 bg-red-500/20 hover:bg-red-500/30 text-red-200 rounded-lg transition-colors" title="Delete">
                                                     <Trash2 className="h-4 w-4" />
                                                 </button>
                                             )}

@@ -97,50 +97,50 @@ const VoterDashboard = () => {
     });
 
     return (
-        <div className="min-h-screen bg-gray-50 font-sans">
+        <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-sans">
             {/* Header */}
-            <header className="bg-white border-b border-gray-200 px-8 py-4 flex justify-between items-center sticky top-0 z-10">
-                <h1 className="text-2xl font-bold text-gray-800">Voter Dashboard</h1>
+            <header className="bg-white/10 backdrop-blur-lg border-b border-white/20 px-8 py-4 flex justify-between items-center sticky top-0 z-10">
+                <h1 className="text-2xl font-bold text-white">Voter Dashboard</h1>
                 <UserDropdown />
             </header>
 
             <main className="p-8 max-w-5xl mx-auto">
-                <div className="flex space-x-6 mb-8 border-b border-gray-200">
+                <div className="flex space-x-6 mb-8 border-b border-white/20">
                     <button
                         onClick={() => setActiveTab('active')}
-                        className={`pb-4 px-4 text-base font-medium transition-colors relative ${activeTab === 'active' ? 'text-indigo-600' : 'text-gray-500 hover:text-indigo-600'}`}
+                        className={`pb-4 px-4 text-base font-medium transition-colors relative ${activeTab === 'active' ? 'text-white' : 'text-white/70 hover:text-white'}`}
                     >
                         Active Elections
-                        {activeTab === 'active' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-indigo-600 rounded-t-full"></div>}
+                        {activeTab === 'active' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-white rounded-t-full"></div>}
                     </button>
                     <button
                         onClick={() => setActiveTab('completed')}
-                        className={`pb-4 px-4 text-base font-medium transition-colors relative ${activeTab === 'completed' ? 'text-indigo-600' : 'text-gray-500 hover:text-indigo-600'}`}
+                        className={`pb-4 px-4 text-base font-medium transition-colors relative ${activeTab === 'completed' ? 'text-white' : 'text-white/70 hover:text-white'}`}
                     >
                         Results / Completed
-                        {activeTab === 'completed' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-indigo-600 rounded-t-full"></div>}
+                        {activeTab === 'completed' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-white rounded-t-full"></div>}
                     </button>
                 </div>
 
                 <div className="grid grid-cols-1 gap-6">
                     {filteredElections.length === 0 ? (
-                        <div className="text-center py-12 bg-white rounded-xl border border-gray-100 shadow-sm">
-                            <p className="text-gray-500">No {activeTab} elections found for your location.</p>
+                        <div className="text-center py-12 bg-white/10 backdrop-blur-lg rounded-xl border border-white/20 shadow-xl">
+                            <p className="text-white">No {activeTab} elections found for your location.</p>
                         </div>
                     ) : filteredElections.map(election => (
-                        <div key={election._id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col md:flex-row justify-between items-center hover:shadow-md transition-shadow">
+                        <div key={election._id} className="bg-white/10 backdrop-blur-lg rounded-xl shadow-xl border border-white/20 p-6 flex flex-col md:flex-row justify-between items-center hover:shadow-2xl transition-shadow">
                             <div>
                                 <div className="flex items-center space-x-3 mb-2">
-                                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${election.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'
+                                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${election.status === 'Active' ? 'bg-green-500 text-white' : 'bg-white/20 text-white'
                                         }`}>
                                         {election.status}
                                     </span>
-                                    <span className="text-gray-500 text-sm font-medium">{election.type}</span>
-                                    {election.targetCity && <span className="text-gray-400 text-sm">• {election.targetCity}</span>}
-                                    {election.targetProvince && <span className="text-gray-400 text-sm">• {election.targetProvince}</span>}
+                                    <span className="text-white/90 text-sm font-medium">{election.type}</span>
+                                    {election.targetCity && <span className="text-white/70 text-sm">• {election.targetCity}</span>}
+                                    {election.targetProvince && <span className="text-white/70 text-sm">• {election.targetProvince}</span>}
                                 </div>
-                                <h3 className="text-xl font-bold text-gray-800 mb-1">{election.title}</h3>
-                                <p className="text-sm text-gray-500 flex items-center">
+                                <h3 className="text-xl font-bold text-white mb-1">{election.title}</h3>
+                                <p className="text-sm text-white/80 flex items-center">
                                     <Calendar className="h-4 w-4 mr-2" />
                                     {new Date(election.date).toLocaleDateString()}
                                     <Clock className="h-4 w-4 ml-4 mr-2" />
