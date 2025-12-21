@@ -15,6 +15,8 @@ const electionSchema = mongoose.Schema({
     startTime: { type: Date, required: true },
     endTime: { type: Date, required: true },
     candidates: [candidateSchema],
+    targetCity: { type: String }, // Required if type is 'City' (or 'City Wide')
+    voters: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] // Track who voted
 }, {
     timestamps: true,
     toJSON: { virtuals: true },

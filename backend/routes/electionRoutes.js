@@ -1,5 +1,6 @@
-import express from 'express';
+import express from 'express'; 
 import { createElection, getElections, addCandidate } from '../controllers/electionController.js';
+import { castVote } from '../controllers/voteController.js';
 import { protect, authorize } from '../middleware/authMiddleware.js';
 import upload from '../middleware/uploadMiddleware.js';
 
@@ -11,5 +12,7 @@ router.route('/')
 
 router.route('/:id/candidates')
     .post(protect, authorize('admin', 'official'), upload.single('photo'), addCandidate);
+
+router.put('/:id/vote', protect, authorize('voter'), castVote);
 
 export default router;

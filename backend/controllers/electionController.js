@@ -5,7 +5,7 @@ import Election from '../models/Election.js';
 // @access  Private/Official
 const createElection = async (req, res) => {
     try {
-        const { title, type, date } = req.body;
+        const { title, type, date, targetCity } = req.body;
 
         const electionDate = new Date(date);
         const year = electionDate.getFullYear();
@@ -20,6 +20,7 @@ const createElection = async (req, res) => {
         const election = await Election.create({
             title,
             type,
+            targetCity: (type === 'City' || type === 'City Wide') ? targetCity : undefined,
             date: electionDate,
             year,
             startTime,

@@ -14,8 +14,11 @@ const OfficialDashboard = () => {
     const [electionData, setElectionData] = useState({
         title: '',
         type: 'National',
-        date: ''
+        date: '',
+        targetCity: 'Islamabad'
     });
+
+    const cities = ['Islamabad', 'Karachi', 'Lahore', 'Peshawar', 'Quetta', 'Multan', 'Faisalabad'];
 
     const [candidateData, setCandidateData] = useState({
         name: '',
@@ -128,8 +131,8 @@ const OfficialDashboard = () => {
                                     <div className="p-6">
                                         <div className="flex justify-between items-start mb-4">
                                             <span className={`px-3 py-1 rounded-full text-xs font-medium ${election.status === 'Active' ? 'bg-green-100 text-green-700' :
-                                                    election.status === 'Completed' ? 'bg-gray-100 text-gray-600' :
-                                                        'bg-blue-100 text-blue-700'
+                                                election.status === 'Completed' ? 'bg-gray-100 text-gray-600' :
+                                                    'bg-blue-100 text-blue-700'
                                                 }`}>
                                                 {election.status}
                                             </span>
