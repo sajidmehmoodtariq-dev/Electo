@@ -72,4 +72,80 @@ const updateUserStatus = async (req, res) => {
     }
 };
 
-export { getUsers, updateUserStatus };
+// @desc    Create a new user
+// @route   POST /api/admin/users
+// @access  Private/Admin
+const createUser = async (req, res) => {
+    try {
+        const { name, email, password, cnic, role } = req.body;
+
+        const userExists = await User.findOne({ email });
+        if (userExists) {
+            return res.status(400).json({ message: 'User already exists' });
+        }
+
+        if (cnic) {
+            const cnicExists = await User.findOne({ cnic });
+            if (cnicExists) {
+                return res.status(400).json({ message: 'CNIC already used' });
+            }
+        }
+
+        const user = await User.create({
+            name,
+            email,
+            password,
+            cnic: cnic || undefined, // Ensure empty string doesn't cause duplicate key error
+            role: role || 'voter',
+            status: 'active', // Admin created users are auto-approved
+        });
+
+        if (user) {
+            const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+            const message = `Dear ${user.name},\n\nYour account has been created by the admin.\n\nLogin Credentials:\nEmail: ${user.email}\nPassword: ${password}\n\nPlease login at: ${frontendUrl}/login\n\nPlease change your password after logging in.\n\nRegards,\nTeam Electo`;
+
+            try {
+                await sendEmail({
+                    email: user.email,
+                    subject: 'Account Created',
+                    message,
+                });
+            } catch (error) {
+                console.error('Email send failed:', error);
+            }
+
+            res.status(201).json({
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                status: user.status,
+                cnic: user.cnic,
+            });
+        } else {
+            res.status(400).json({ message: 'Invalid user data' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @desc    Delete user
+// @route   DELETE /api/admin/users/:id
+// @access  Private/Admin
+const deleteUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+
+        if (user) {
+            await user.deleteOne();
+            res.json({ message: 'User removed' });
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export { getUsers, updateUserStatus, createUser, deleteUser };

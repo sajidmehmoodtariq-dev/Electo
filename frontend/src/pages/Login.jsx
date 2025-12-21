@@ -6,15 +6,17 @@ import { Mail, Lock, LogIn, Github } from 'lucide-react';
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const { login } = useAuth();
     const navigate = useNavigate();
-    const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         try {
             const user = await login(email, password);
-            // Redirect logic handled by App.jsx or here. 
+            // Redirect logic handled by App.jsx or here.
             // With new App.jsx redirect handler, we might just want to reload or let context update trigger it?
             // Since login returns user, we can navigate manually too.
             if (!user.cnic) navigate('/complete-profile');
@@ -89,9 +91,14 @@ const Login = () => {
 
                     <button
                         type="submit"
-                        className="w-full bg-white text-indigo-600 font-bold py-3 px-4 rounded-xl hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600 transition-all shadow-lg transform hover:-translate-y-0.5 active:translate-y-0"
+                        disabled={isLoading}
+                        className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-xl font-bold text-lg hover:from-indigo-700 hover:to-purple-700 transform hover:scale-[1.02] transition-all duration-200 shadow-lg hover:shadow-indigo-500/30 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                     >
-                        Sign In
+                        {isLoading ? (
+                            <div className="h-6 w-6 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                        ) : (
+                            <>Sign In <ArrowRight className="ml-2 h-5 w-5" /></>
+                        )}
                     </button>
                 </form>
 

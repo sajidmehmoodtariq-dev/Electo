@@ -3,28 +3,23 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { User, Lock, Mail, CreditCard, Upload } from 'lucide-react';
 
+import { validatePassword } from '../utils/validators';
+
 const Signup = () => {
     const [formData, setFormData] = useState({
         username: '',
         email: '',
-        cnic: '',
         password: '',
         confirmPassword: '',
+        cnic: ''
     });
+    const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const { register } = useAuth();
     const navigate = useNavigate();
-    const [error, setError] = useState('');
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
-
-    const validatePassword = (pass) => {
-        if (pass.length < 8) return "Password must be at least 8 characters long";
-        if (!/[a-zA-Z]/.test(pass)) return "Password must contain at least one letter";
-        if (!/\d/.test(pass)) return "Password must contain at least one number";
-        if (!/[!@#$%^&*(),.?":{}|<>]/.test(pass)) return "Password must contain at least one symbol";
-        return null;
     };
 
     const handleSubmit = async (e) => {
@@ -41,6 +36,7 @@ const Signup = () => {
             return;
         }
 
+        setIsLoading(true);
         try {
             // Map form data to backend expectations (backend expects 'name', 'email', 'password', 'cnic')
             const user = await register({
@@ -52,6 +48,8 @@ const Signup = () => {
             navigate('/voter'); // Redirect to voter dashboard
         } catch (err) {
             setError(err.response?.data?.message || 'Registration failed');
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -174,9 +172,10 @@ const Signup = () => {
 
                     <button
                         type="submit"
-                        className="w-full mt-2 bg-white text-indigo-600 font-bold py-3 px-4 rounded-xl hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600 transition-all shadow-lg transform hover:-translate-y-0.5 active:translate-y-0"
+                        disabled={isLoading}
+                        className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-xl font-bold text-lg hover:from-blue-700 hover:to-indigo-700 transform hover:scale-[1.02] transition-all duration-200 shadow-lg hover:shadow-indigo-500/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                     >
-                        Create Account
+                        {isLoading ? 'Creating Account...' : 'Create Account'}
                     </button>
                 </form>
 
