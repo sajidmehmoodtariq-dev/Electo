@@ -99,16 +99,16 @@ const VoterDashboard = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-sans">
             {/* Header */}
-            <header className="bg-white/10 backdrop-blur-lg border-b border-white/20 px-8 py-4 flex justify-between items-center sticky top-0 z-10">
-                <h1 className="text-2xl font-bold text-white">Voter Dashboard</h1>
+            <header className="bg-white/10 backdrop-blur-lg border-b border-white/20 px-4 sm:px-8 py-4 flex justify-between items-center sticky top-0 z-10">
+                <h1 className="text-lg sm:text-2xl font-bold text-white">Voter Dashboard</h1>
                 <UserDropdown />
             </header>
 
-            <main className="p-8 max-w-5xl mx-auto">
-                <div className="flex space-x-6 mb-8 border-b border-white/20">
+            <main className="p-4 sm:p-8 max-w-5xl mx-auto">
+                <div className="flex space-x-3 sm:space-x-6 mb-8 border-b border-white/20 overflow-x-auto">
                     <button
                         onClick={() => setActiveTab('active')}
-                        className={`pb-4 px-4 text-base font-medium transition-colors relative ${activeTab === 'active' ? 'text-white' : 'text-white/70 hover:text-white'}`}
+                        className={`pb-4 px-2 sm:px-4 text-sm sm:text-base font-medium transition-colors relative whitespace-nowrap ${activeTab === 'active' ? 'text-white' : 'text-white/70 hover:text-white'}`}
                     >
                         Active Elections
                         {activeTab === 'active' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-white rounded-t-full"></div>}
@@ -128,9 +128,9 @@ const VoterDashboard = () => {
                             <p className="text-white">No {activeTab} elections found for your location.</p>
                         </div>
                     ) : filteredElections.map(election => (
-                        <div key={election._id} className="bg-white/10 backdrop-blur-lg rounded-xl shadow-xl border border-white/20 p-6 flex flex-col md:flex-row justify-between items-center hover:shadow-2xl transition-shadow">
-                            <div>
-                                <div className="flex items-center space-x-3 mb-2">
+                        <div key={election._id} className="bg-white/10 backdrop-blur-lg rounded-xl shadow-xl border border-white/20 p-4 sm:p-6 flex flex-col md:flex-row justify-between items-start md:items-center hover:shadow-2xl transition-shadow">
+                            <div className="w-full md:w-auto">
+                                <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
                                     <span className={`px-3 py-1 rounded-full text-xs font-medium ${election.status === 'Active' ? 'bg-green-500 text-white' : 'bg-white/20 text-white'
                                         }`}>
                                         {election.status}
@@ -139,8 +139,8 @@ const VoterDashboard = () => {
                                     {election.targetCity && <span className="text-white/70 text-sm">• {election.targetCity}</span>}
                                     {election.targetProvince && <span className="text-white/70 text-sm">• {election.targetProvince}</span>}
                                 </div>
-                                <h3 className="text-xl font-bold text-white mb-1">{election.title}</h3>
-                                <p className="text-sm text-white/80 flex items-center">
+                                <h3 className="text-lg sm:text-xl font-bold text-white mb-1">{election.title}</h3>
+                                <p className="text-sm text-white/80 flex flex-wrap items-center gap-2">
                                     <Calendar className="h-4 w-4 mr-2" />
                                     {new Date(election.date).toLocaleDateString()}
                                     <Clock className="h-4 w-4 ml-4 mr-2" />
@@ -149,15 +149,15 @@ const VoterDashboard = () => {
                                 </p>
                             </div>
 
-                            <div className="mt-4 md:mt-0">
+                            <div className="mt-4 md:mt-0 w-full md:w-auto">
                                 {hasVoted(election) && activeTab === 'active' ? (
-                                    <div className="px-6 py-3 bg-gray-100 text-gray-500 rounded-xl font-bold flex items-center cursor-default">
+                                    <div className="px-4 sm:px-6 py-2 sm:py-3 bg-gray-100 text-gray-500 rounded-xl font-bold flex items-center justify-center cursor-default">
                                         <CheckCircle className="h-5 w-5 mr-2" /> Voted
                                     </div>
                                 ) : activeTab === 'active' ? (
                                     <button
                                         onClick={() => handleVoteClick(election)}
-                                        className="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow-lg shadow-indigo-500/30 transition-all transform hover:-translate-y-0.5"
+                                        className="w-full md:w-auto px-6 sm:px-8 py-2 sm:py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow-lg shadow-indigo-500/30 transition-all transform hover:-translate-y-0.5"
                                     >
                                         Vote Now
                                     </button>
@@ -232,20 +232,20 @@ const VoterDashboard = () => {
             {/* Confirmation Modal */}
             {confirmationOpen && selectedElection && (
                 <div className="fixed inset-0 bg-black/60 z-[60] flex items-center justify-center p-4">
-                    <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
-                        <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <div className="text-3xl">⚠️</div>
+                    <div className="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 max-w-md w-full text-center">
+                        <div className="w-12 h-12 sm:w-16 sm:h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <div className="text-2xl sm:text-3xl">⚠️</div>
                         </div>
-                        <h3 className="text-2xl font-bold text-gray-900 mb-2">Confirm Your Vote</h3>
-                        <p className="text-gray-500 mb-8">
+                        <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Confirm Your Vote</h3>
+                        <p className="text-sm sm:text-base text-gray-500 mb-6 sm:mb-8">
                             Are you sure you want to cast your vote for <span className="font-bold text-indigo-600">{selectedElection.candidates.find(c => c._id === selectedCandidateId)?.name}</span>?
                             <br /><span className="text-xs text-red-500 font-bold mt-2 block">This action cannot be undone.</span>
                         </p>
 
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-2 gap-3 sm:gap-4">
                             <button
                                 onClick={() => setConfirmationOpen(false)}
-                                className="px-4 py-3 border border-gray-300 rounded-xl text-gray-700 font-bold hover:bg-gray-50 transition-colors"
+                                className="px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-xl text-sm sm:text-base text-gray-700 font-bold hover:bg-gray-50 transition-colors"
                             >
                                 Cancel
                             </button>

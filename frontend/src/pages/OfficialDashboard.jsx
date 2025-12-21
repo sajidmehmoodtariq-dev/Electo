@@ -137,26 +137,26 @@ const OfficialDashboard = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 font-sans">
             {/* Header */}
-            <header className="bg-white/10 backdrop-blur-lg border-b border-white/20 px-8 py-4 flex justify-between items-center sticky top-0 z-10">
-                <div className="flex items-center space-x-3">
-                    <div className="bg-white/20 backdrop-blur-md p-2 rounded-lg">
-                        <Users className="h-6 w-6 text-white" />
+            <header className="bg-white/10 backdrop-blur-lg border-b border-white/20 px-4 sm:px-8 py-4 flex justify-between items-center sticky top-0 z-10">
+                <div className="flex items-center space-x-2 sm:space-x-3">
+                    <div className="bg-white/20 backdrop-blur-md p-1.5 sm:p-2 rounded-lg">
+                        <Users className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                     </div>
-                    <h1 className="text-2xl font-bold text-white">Official Dashboard</h1>
+                    <h1 className="text-lg sm:text-2xl font-bold text-white">Official Dashboard</h1>
                 </div>
                 <div className="flex items-center space-x-4">
                     <UserDropdown />
                 </div>
             </header>
 
-            <main className="p-8 max-w-7xl mx-auto">
+            <main className="p-4 sm:p-8 max-w-7xl mx-auto">
                 {activeView === 'dashboard' && (
                     <>
-                        <div className="flex justify-between items-center mb-8">
-                            <h2 className="text-xl font-semibold text-white">Managed Elections</h2>
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+                            <h2 className="text-lg sm:text-xl font-semibold text-white">Managed Elections</h2>
                             <button
                                 onClick={() => setActiveView('create-step-1')}
-                                className="flex items-center px-4 py-2 bg-white/20 backdrop-blur-md text-white rounded-lg hover:bg-white/30 transition-all shadow-lg"
+                                className="w-full sm:w-auto flex items-center justify-center px-4 py-2 bg-white/20 backdrop-blur-md text-white rounded-lg hover:bg-white/30 transition-all shadow-lg"
                             >
                                 <Plus className="h-4 w-4 mr-2" /> Create Election
                             </button>

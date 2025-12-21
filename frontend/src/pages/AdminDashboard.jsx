@@ -117,16 +117,16 @@ const AdminDashboard = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-white font-sans">
             {/* Header */}
-            <header className="bg-white/10 backdrop-blur-lg border-b border-white/20 p-6 flex justify-between items-center shadow-xl">
+            <header className="bg-white/10 backdrop-blur-lg border-b border-white/20 p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-xl">
                 <div className="flex items-center space-x-4">
-                    <h1 className="text-2xl font-bold text-white">
+                    <h1 className="text-xl sm:text-2xl font-bold text-white">
                         Admin Dashboard
                     </h1>
                 </div>
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-4 w-full sm:w-auto">
                     <button
                         onClick={() => setCreateModalOpen(true)}
-                        className="flex items-center px-4 py-2 bg-white/20 backdrop-blur-md text-white rounded-lg hover:bg-white/30 transition-all shadow-lg"
+                        className="flex-1 sm:flex-initial flex items-center justify-center px-4 py-2 bg-white/20 backdrop-blur-md text-white rounded-lg hover:bg-white/30 transition-all shadow-lg"
                     >
                         <Plus className="h-4 w-4 mr-2" /> Create User
                     </button>
@@ -135,13 +135,13 @@ const AdminDashboard = () => {
             </header>
 
             {/* Container */}
-            <div className="container mx-auto p-6 max-w-6xl">
+            <div className="container mx-auto p-4 sm:p-6 max-w-6xl">
 
                 {/* Tabs */}
-                <div className="flex space-x-6 mb-8 border-b border-white/20">
+                <div className="flex space-x-3 sm:space-x-6 mb-8 border-b border-white/20 overflow-x-auto">
                     <button
                         onClick={() => setActiveTab('requests')}
-                        className={`pb-4 px-2 text-sm font-medium transition-colors relative ${activeTab === 'requests' ? 'text-white' : 'text-white/70 hover:text-white'}`}
+                        className={`pb-4 px-2 text-xs sm:text-sm font-medium transition-colors relative whitespace-nowrap ${activeTab === 'requests' ? 'text-white' : 'text-white/70 hover:text-white'}`}
                     >
                         New Requests
                         {activeTab === 'requests' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-white rounded-t-full"></div>}
@@ -158,14 +158,14 @@ const AdminDashboard = () => {
                 {/* Content */}
                 <div className="bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 overflow-hidden shadow-2xl">
                     <div className="overflow-x-auto">
-                        <table className="w-full text-left border-collapse">
+                        <table className="w-full text-left border-collapse min-w-[640px]">
                             <thead>
                                 <tr className="bg-white/10 backdrop-blur-md border-b border-white/20 text-xs uppercase text-white/70 tracking-wider">
-                                    <th className="p-4 pl-6">User</th>
-                                    <th className="p-4">Role</th>
-                                    <th className="p-4">CNIC</th>
-                                    <th className="p-4">Status</th>
-                                    <th className="p-4 pr-6 text-right">Actions</th>
+                                    <th className="p-2 sm:p-4 pl-4 sm:pl-6">User</th>
+                                    <th className="p-2 sm:p-4">Role</th>
+                                    <th className="p-2 sm:p-4 hidden sm:table-cell">CNIC</th>
+                                    <th className="p-2 sm:p-4">Status</th>
+                                    <th className="p-2 sm:p-4 pr-4 sm:pr-6 text-right">Actions</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-white/10">
@@ -177,18 +177,18 @@ const AdminDashboard = () => {
                                     </tr>
                                 ) : users.map((user) => (
                                     <tr key={user._id} className="hover:bg-white/5 transition-colors">
-                                        <td className="p-4 pl-6">
-                                            <div className="flex items-center space-x-3">
-                                                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-sm font-bold">
+                                        <td className="p-2 sm:p-4 pl-4 sm:pl-6">
+                                            <div className="flex items-center space-x-2 sm:space-x-3">
+                                                <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-xs sm:text-sm font-bold flex-shrink-0">
                                                     {user.name.charAt(0).toUpperCase()}
                                                 </div>
-                                                <div>
-                                                    <div className="font-medium text-white">{user.name}</div>
-                                                    <div className="text-sm text-white/70">{user.email}</div>
+                                                <div className="min-w-0">
+                                                    <div className="font-medium text-white text-sm sm:text-base truncate">{user.name}</div>
+                                                    <div className="text-xs sm:text-sm text-white/70 truncate">{user.email}</div>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="p-4">
+                                        <td className="p-2 sm:p-4">
                                             <span className={`px-2 py-1 rounded-full text-xs font-medium border ${user.role === 'admin' ? 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20' :
                                                 user.role === 'official' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
                                                     'bg-blue-500/10 text-blue-400 border-blue-500/20'
@@ -196,10 +196,10 @@ const AdminDashboard = () => {
                                                 {user.role}
                                             </span>
                                         </td>
-                                        <td className="p-4 text-white/90 font-mono text-sm">
+                                        <td className="p-2 sm:p-4 text-white/90 font-mono text-xs sm:text-sm hidden sm:table-cell">
                                             {user.cnic || <span className="text-white/40">N/A</span>}
                                         </td>
-                                        <td className="p-4">
+                                        <td className="p-2 sm:p-4">
                                             <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${user.status === 'active' ? 'bg-green-500/20 text-green-300 border-green-400/40' :
                                                 user.status === 'rejected' ? 'bg-red-500/30 text-red-200 border-red-400/50' :
                                                     'bg-yellow-500/20 text-yellow-300 border-yellow-400/40'
@@ -207,7 +207,7 @@ const AdminDashboard = () => {
                                                 {user.status}
                                             </span>
                                         </td>
-                                        <td className="p-4 pr-6 text-right space-x-2">
+                                        <td className="p-2 sm:p-4 pr-4 sm:pr-6 text-right space-x-1 sm:space-x-2">
                                             {user.status === 'pending' && (
                                                 <>
                                                     <button onClick={() => handleApprove(user._id)} className="p-2 bg-green-500/20 hover:bg-green-500/30 text-green-200 rounded-lg transition-colors" title="Approve">
@@ -247,14 +247,14 @@ const AdminDashboard = () => {
 
             {/* Rejection Modal */}
             {modalOpen && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
-                    <div className="bg-gray-800 rounded-2xl border border-gray-700 p-6 w-full max-w-md shadow-2xl">
-                        <h3 className="text-xl font-bold text-white mb-4">Reject User</h3>
-                        <p className="text-gray-400 mb-4 text-sm">
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                    <div className="bg-gray-800 rounded-2xl border border-gray-700 p-4 sm:p-6 w-full max-w-md shadow-2xl">
+                        <h3 className="text-lg sm:text-xl font-bold text-white mb-4">Reject User</h3>
+                        <p className="text-gray-400 mb-4 text-xs sm:text-sm">
                             Please provide a reason for rejecting <span className="text-white font-medium">{selectedUser?.name}</span>'s account. This will be visible to them.
                         </p>
                         <textarea
-                            className="w-full bg-gray-900 border border-gray-600 rounded-xl p-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500/50 mb-6 h-32"
+                            className="w-full bg-gray-900 border border-gray-600 rounded-xl p-3 text-sm sm:text-base text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500/50 mb-4 sm:mb-6 h-24 sm:h-32"
                             placeholder="Enter rejection reason..."
                             value={rejectionReason}
                             onChange={(e) => setRejectionReason(e.target.value)}
