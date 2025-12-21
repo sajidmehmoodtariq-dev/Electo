@@ -6,6 +6,7 @@ import passport from 'passport';
 import './config/passport.js'; // Import passport config to run the strategy setup
 import authRoutes from './routes/authRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
+import electionRoutes from './routes/electionRoutes.js';
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.use(passport.initialize());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/elections', electionRoutes);
 
 app.get('/', (req, res) => {
     res.send('API is running...');
