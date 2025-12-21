@@ -28,10 +28,10 @@ const userSchema = new mongoose.Schema({
         unique: true,
         sparse: true, // Allows null/undefined to not clash for uniqueness
     },
-    isVoted: {
-        type: Boolean,
-        default: false,
-    },
+    votedElections: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Election'
+    }],
     googleId: {
         type: String,
         unique: true,

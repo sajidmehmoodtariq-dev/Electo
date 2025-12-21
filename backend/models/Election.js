@@ -16,7 +16,9 @@ const electionSchema = mongoose.Schema({
     endTime: { type: Date, required: true },
     candidates: [candidateSchema],
     targetCity: { type: String }, // Required if type is 'City' (or 'City Wide')
-    voters: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] // Track who voted
+    targetProvince: { type: String }, // Required if type is 'Provincial'
+    voters: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Track who voted
+    isCancelled: { type: Boolean, default: false }
 }, {
     timestamps: true,
     toJSON: { virtuals: true },
@@ -25,6 +27,7 @@ const electionSchema = mongoose.Schema({
 
 // Virtual field for 'status'
 electionSchema.virtual('status').get(function () {
+    if (this.isCancelled) return 'Inactive';
     const now = new Date();
     if (now < this.startTime) return 'Upcoming';
     if (now >= this.startTime && now <= this.endTime) return 'Active';

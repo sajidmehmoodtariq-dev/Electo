@@ -10,7 +10,7 @@ import CompleteProfile from './pages/CompleteProfile';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import OfficialDashboard from './pages/OfficialDashboard';
-import { VoterDashboard } from './pages/Dashboards';
+import VoterDashboard from './pages/VoterDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 
 const RedirectHandler = () => {

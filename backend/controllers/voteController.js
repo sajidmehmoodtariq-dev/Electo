@@ -18,6 +18,10 @@ const castVote = async (req, res) => {
         }
 
         // 1. Check Status
+        if (election.isCancelled) {
+            return res.status(400).json({ message: 'Election is cancelled/inactive' });
+        }
+
         // Re-calculate status just in case
         const now = new Date();
         const isActive = now >= election.startTime && now <= election.endTime;
