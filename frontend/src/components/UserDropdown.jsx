@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { LogOut, User, ChevronDown, Settings } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -6,12 +7,26 @@ import { useAuth } from '../context/AuthContext';
 const UserDropdown = () => {
     const { user, logout } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
+    const [dropdownPosition, setDropdownPosition] = useState({ top: 0, right: 0 });
     const dropdownRef = useRef(null);
+    const buttonRef = useRef(null);
+
+    // Update dropdown position when opening
+    useEffect(() => {
+        if (isOpen && buttonRef.current) {
+            const rect = buttonRef.current.getBoundingClientRect();
+            setDropdownPosition({
+                top: rect.bottom + 8,
+                right: window.innerWidth - rect.right
+            });
+        }
+    }, [isOpen]);
 
     // Close dropdown when clicking outside
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target) &&
+                buttonRef.current && !buttonRef.current.contains(event.target)) {
                 setIsOpen(false);
             }
         };
@@ -29,7 +44,7 @@ const UserDropdown = () => {
     };
 
     return (
-        <div className="relative" ref={dropdownRef}>
+        <div className="relative" ref={buttonRef}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="flex items-center space-x-3 focus:outline-none group p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
@@ -58,9 +73,16 @@ const UserDropdown = () => {
                 <ChevronDown className={`h-4 w-4 text-gray-400 transition-transform duration-200 ${isOpen ? 'transform rotate-180' : ''}`} />
             </button>
 
-            {/* Dropdown Menu */}
-            {isOpen && (
-                <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-2xl py-2 border border-gray-100 z-50 transform origin-top-right transition-all">
+            {/* Dropdown Menu - Rendered via Portal */}
+            {isOpen && createPortal(
+                <div 
+                    ref={dropdownRef}
+                    className="fixed w-56 bg-white rounded-xl shadow-2xl py-2 border border-gray-100 z-[99999]"
+                    style={{ 
+                        top: `${dropdownPosition.top}px`, 
+                        right: `${dropdownPosition.right}px` 
+                    }}
+                >
                     <div className="px-4 py-3 border-b border-gray-50">
                         <p className="text-sm text-gray-900 font-bold truncate">{user?.name}</p>
                         <p className="text-xs text-gray-500 truncate">{user?.email}</p>
@@ -87,7 +109,8 @@ const UserDropdown = () => {
                             Sign out
                         </button>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </div>
     );
